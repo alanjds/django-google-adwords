@@ -2,6 +2,8 @@
 django-google-adwords
 =====================
 
+|build-status-image|
+
 `Django`_ modelling and helpers for the `Google AdWords API`_.
 
 Using Celery_ to process tasks in the background the provided models include
@@ -264,3 +266,5 @@ Authors
 .. _`Google AdWords API`: https://developers.google.com/adwords/api/
 .. _`Celery`: http://www.celeryproject.org
 .. _v201605: https://developers.google.com/adwords/api/docs/reference/#v201605
+.. |build-status-image| image:: https://secure.travis-ci.org/alanjds/django-google-adwords.svg?branch=master
+   :target: http://travis-ci.org/alanjds/django-google-adwords?branch=master
