@@ -7,7 +7,9 @@ import logging
 import os
 import re
 import time
+import csv as csv_py3
 
+import unicodecsv as csv_py2
 from celery.canvas import group
 from celery.contrib.methods import task
 from django.conf import settings
@@ -25,7 +27,6 @@ from django_google_adwords.errors import *
 from django_google_adwords.helper import adwords_service
 from django_google_adwords.lock import release_googleadwords_lock
 from django_toolkit.celery.decorators import ensure_self
-from django_toolkit.csv.unicode import UnicodeReader
 from django_toolkit.db.models import QuerySetManager
 from djmoney.models.fields import MoneyField
 from googleads.errors import GoogleAdsError
@@ -1559,8 +1560,15 @@ class ReportFile(models.Model):
         """
         name = None
         fields = None
-        with gzip.open(self.file.path, 'rt') as csv_file:
-            csv_reader = UnicodeReader(csv_file)
+        try:    # Python 3
+            csv_file = gzip.open(self.file.path, 'rt', encoding='utf-8')
+            csv_opener = csv_py3.reader
+        except TypeError:  # Python 2
+            csv_file = gzip.open(self.file.path, 'rt')
+            csv_opener = csv_py2.reader
+
+        with csv_file:
+            csv_reader = csv_opener(csv_file)
             for row in csv_reader:
                 if name is None:
                     name = row
